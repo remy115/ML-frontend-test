@@ -1,0 +1,43 @@
+* {
+    font-family:arial,verdana;
+}
+body {
+    margin:0;
+    padding:0;
+    text-align:center;
+}
+#react {
+    margin:auto;
+    display:inline-block;
+    width:1010px;
+    text-align:left;
+}
+
+.barra-busca {
+    background:#FFF059;
+    border-bottom:1px solid #d9d9d9;
+    position:fixed;
+    z-index:300;
+    height:55px;
+}
+
+.barra-busca > input {
+    padding:5px 60px 5px 15px;
+
+}
+
+.btn-busca {
+    position:absolute;
+    color:#666;
+    font-size:22px;
+    padding:0;
+    line-height:1em;
+    width:46px;
+    height:40px;
+    border:1px solid #ccc;
+    background-color:#ffffff;
+    background-image:linear-gradient(#fff,#f0f0f0);
+    top:7px;
+    right:5px;
+    z-index:320;
+}
