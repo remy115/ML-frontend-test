@@ -1,3 +1,4 @@
+const path=require('path')
 const express=require('express')
 
 const app=express();
@@ -19,7 +20,7 @@ function render1(params) {
         if(jsVars.lista)
             lista=jsVars.lista;
     }
-    lista=JSON.stringify(jsVars.lista);
+    lista=JSON.stringify(lista);
 
     var html=`<!doctype html>
     <html lang="pt-br">
@@ -43,10 +44,16 @@ function render1(params) {
     return html;
 }
 
+app.use(express.static(path.resolve(__dirname,'../public')));
+console.log(path.resolve(__dirname,'../public'));
 
 app.get('/',function(req,res) {
     const html=render1({
         title:'Encontre todo tipo de produto!'
     });
     res.send(html);
+});
+
+app.listen(3004,()=>{
+    console.log('listening on port 3004');
 });
