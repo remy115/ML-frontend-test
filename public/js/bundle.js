@@ -9786,10 +9786,23 @@ var Busca = function (_React$Component) {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
-                'div',
-                { className: 'barra-busca' },
-                _react2.default.createElement('img', { src: '/imgs/mercado-livre.png', alt: 'Todos os produtos em um s\xF3 lugar!' }),
-                _react2.default.createElement('input', { type: 'text', name: 'busca', value: this.state.busca, onChange: this.change })
+                'header',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'barra-busca' },
+                    _react2.default.createElement('img', { src: '/imgs/mercado-livre.png', alt: 'Todos os produtos em um s\xF3 lugar!' }),
+                    _react2.default.createElement(
+                        'form',
+                        null,
+                        _react2.default.createElement('input', { type: 'text', name: 'busca', placeholder: 'Nunca deixe de buscar', value: this.state.busca, onChange: this.change }),
+                        _react2.default.createElement(
+                            'button',
+                            { className: 'btn-busca' },
+                            _react2.default.createElement('i', { className: 'icon-glyph' })
+                        )
+                    )
+                )
             );
         }
     }]);

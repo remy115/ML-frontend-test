@@ -27,6 +27,7 @@ function render1(params) {
         <head>
             <meta charset="utf-8" >
             <meta name="description" content="A maior Comunidade de compra e venda online da América Latina.">
+            <link rel="stylesheet" href="/css/fontello.css" >
             <link rel="stylesheet" href="/css/style.css" >
             <title>${title}</title>
             <script>
@@ -53,6 +54,14 @@ app.get('/',function(req,res) {
     });
     res.send(html);
 });
+
+
+// busca de produtos
+app.get('/itens',function(req,res) {
+    var query=req.query;
+    res.send(query);
+});
+
 
 app.listen(3004,()=>{
     console.log('listening on port 3004');

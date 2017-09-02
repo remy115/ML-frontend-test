@@ -20,10 +20,15 @@ class Busca extends React.Component {
 
     render() {
         return (
-            <div className="barra-busca">
-                <img src="/imgs/mercado-livre.png" alt="Todos os produtos em um só lugar!" />
-                <input type="text" name="busca" value={this.state.busca} onChange={this.change} />
-            </div>
+            <header>
+                <div className="barra-busca">
+                    <img src="/imgs/mercado-livre.png" alt="Todos os produtos em um só lugar!" />
+                    <form>
+                        <input type="text" name="busca" placeholder="Nunca deixe de buscar" value={this.state.busca} onChange={this.change} />
+                        <button className="btn-busca"><i className="icon-glyph"></i></button>
+                    </form>
+                </div>
+            </header>
         )
     }
 }
