@@ -4,8 +4,8 @@
   "description": "Front-end test - Mercado Livre",
   "main": "index.js",
   "scripts": {
-    "build":"webpack",
-    "watch":"webpack --watch",
+    "build": "webpack",
+    "watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Remy Ponso Barbosa Barros",
@@ -15,6 +15,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "concat-stream": "^1.6.0",
     "express": "^4.15.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

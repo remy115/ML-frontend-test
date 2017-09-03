@@ -74,3 +74,34 @@ header {
 .barra-busca i[class^="icon-"] {
     vertical-align:baseline;
 }
+
+
+/* listagem */
+.item_lista {
+    width:100%;
+    border-bottom:1px solid #ccc;
+}
+.item_lista .link_image, .item_lista .link_image > img {
+    width:100px;
+    height:100px;
+    display:block;
+    margin:0;
+}
+
+.item_lista .link_image {
+    margin:25px;
+}
+
+.item_lista .item_descr {
+    width:70%;
+    margin-top:25px;
+    font-weight:bold;
+}
+.bolinha {
+    width:15px;
+    height:15px;
+    display:block;
+    background:green;
+    border:1px solid transparent;
+    border-radius:20px;
+}
