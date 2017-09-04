@@ -7,8 +7,8 @@ class ListaTop extends React.Component {
     }
 
     render() {
-        var cats=this.props.cats.map((elem)=>{
-            return <span>{elem}</span>
+        var cats=this.props.cats.map((elem,index)=>{
+            return <span key={index}>{elem}</span>
         });
         return (
             <div className="lista-top"><p>{cats}</p></div>

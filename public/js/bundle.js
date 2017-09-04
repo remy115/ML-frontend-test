@@ -9772,10 +9772,10 @@ var ListaTop = function (_React$Component) {
     _createClass(ListaTop, [{
         key: 'render',
         value: function render() {
-            var cats = this.props.cats.map(function (elem) {
+            var cats = this.props.cats.map(function (elem, index) {
                 return _react2.default.createElement(
                     'span',
-                    null,
+                    { key: index },
                     elem
                 );
             });
