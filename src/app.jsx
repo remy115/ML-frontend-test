@@ -1,6 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+class ListaTop extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        var cats=this.props.cats.map((elem)=>{
+            return <span>{elem}</span>
+        });
+        return (
+            <div className="lista-top"><p>{cats}</p></div>
+        )
+    }
+} // ListaTop
+
 class Busca extends React.Component {
     constructor(props) {
         super(props)
@@ -37,40 +52,79 @@ class Busca extends React.Component {
 class Lista extends React.Component {
     constructor(props) {
         super(props)
-        this.lista=props.lista;
+        this.lista=props.lista.items;
+        this.cats=props.lista.categories;
     }
 
     render() {
+
         var list=this.lista.map((elem)=>{
             var id=elem.id;
             var image=elem.picture;
             var descr=elem.title;
+            var condition=elem.condition;
+            if(condition == 'new') {
+                condition='Produto Novo';
+            } else if(condition == 'used') {
+                condition='Produto Usado'
+            } else {
+                condition='estado indefinido';
+            }
             var shipping=elem.free_shipping;
-            // var bolinha=shipping ? 'block' : 'none';
+            var bolinha=shipping ? '' : ' hide';
             var preco=elem.price.amount;
             var moeda=elem.price.currency;
-            var oioi1=​"oioi333";
+            var symbol=elem.price.symbol;
+            var link1='/items/'+id;
             return (
-                <div className="item_lista">
+                <div key={id} className="item_lista">
                     <a href={link1} className="link_image">
                         <img src={image} alt={descr} />
                     </a>
                     <div className="item_descr">
                         <h2>
-                            $ {preco} <div className="bolinha" style={{display:bolinha}}></div>
+                            <strong>{symbol} {preco}<div><span className={'bolinha'+bolinha} style={{display:bolinha}}></span></div></strong>
                         </h2>
                         <h3>
                             <a href={link1}>
-                                <p>{descr}</p>
+                                {descr}
                             </a>
                         </h3>
+                    </div>
+                    <div className="desc_right">
+                        <p>{condition}</p>
                     </div>
                 </div>
             );
         });
+        return (
+            <div className="center-content">
+                <ListaTop cats={this.cats} />
+                <div id="lista-prods">
+                    {list}
+                </div>
+            </div>
+        )
     }
 }
 
+class Detalhe extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        return (
+            <div className="center-content">
+                <ListaTop cats={this.cats} />
+                <div id="produto-detalhe">
+                    {list}
+                </div>
+            </div>
+        )
+
+    }
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -83,13 +137,19 @@ class App extends React.Component {
     }
 
     render() {
+        var ret=null;
         if(this.lista && this.lista.items) {
-            return <Lista lista={this.lista} />
+            ret=(<div>
+                    <Busca />
+                    <Lista lista={this.lista} />
+                </div>);
+        } else {
+            ret=(<div>
+                    <Busca />
+                </div>)
         }
-        return (
-            <Busca />
-        )
-    }
+        return ret;
+    } // render
 }
 
 ReactDOM.render(

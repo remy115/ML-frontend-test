@@ -4,14 +4,35 @@
 body {
     margin:0;
     padding:0;
+    width:100%;
+    background:#eaeaea;
 }
-/* #react {
+#react, #react > div {
+    display:inline-block;
+}
+#react, #react > div {
     position:relative;
     margin:auto;
-    display:inline-block;
-    width:1010px;
-    text-align:left;
-} */
+    width:100%;
+}
+
+#lista-prods, #produto-detalhe {
+    background:#fff;
+    display:inherit;
+}
+.lista-top {
+    position:relative;
+    width:100%;
+    background:transparent;
+    color:#909090;
+    font-style:italic;
+}
+.lista-top span:before {
+    content:' | '
+}
+.lista-top span:first-child:before {
+    content:''
+}
 
 header {
     background:#FFF059;
@@ -19,20 +40,31 @@ header {
     width:100%;
     height:51px;
     z-index:290;
+    top:0;
     border-bottom:1px solid #d9d9d9;
 }
 .barra-busca * {
     box-sizing:border-box;
 }
+.center-content {
+    padding-top:50px;
+    display:table;
+    max-width:1080px;
+    width:100%;
+}
+
+.center-content, .barra-busca {
+    margin:0 auto;
+}
+
 .barra-busca {
     background:transparent;
     position:relative;
     display:block;
     z-index:300;
     height:100%;
-    margin:0 auto;
-    max-width:1000px;
     padding-left:80px;
+    max-width:1000px;
 }
 
 .barra-busca > img {
@@ -45,7 +77,7 @@ header {
     position:relative;
     padding:5px 0;
     height:50px;
-    max-width:520px;
+    width:100%;
 }
 
 .barra-busca input {
@@ -78,13 +110,17 @@ header {
 
 /* listagem */
 .item_lista {
+    position:relative;
     width:100%;
     border-bottom:1px solid #ccc;
+    float:left;
+    padding-right:200px;
+    box-sizing:border-box;
 }
 .item_lista .link_image, .item_lista .link_image > img {
     width:100px;
     height:100px;
-    display:block;
+    float:left;
     margin:0;
 }
 
@@ -96,12 +132,73 @@ header {
     width:70%;
     margin-top:25px;
     font-weight:bold;
+    float:left;
 }
+.item_lista > .desc_right {
+    position:absolute;
+    height:100%;
+    top:0;
+    right:0;
+    width:200px;
+    text-align:center;
+    font-size:0.95em;
+    color:#909090;
+    box-sizing:border-box;
+    padding:25px;
+    font-style:italic;
+    font-weight:bold;
+}
+.item_lista > .desc_right p {
+    margin:0;
+}
+
+.item_descr > h2 {
+    margin-top:5px;
+    margin-bottom:10px;
+}
+.item_descr > h2 > strong {
+    float:left;
+    position: relative;
+    padding-right:30px;
+}
+.item_descr > h2 > strong > div {
+    position:absolute;
+    right:0;
+    top:0;
+    height:100%;
+    width:25px;
+    text-align:right;
+    display:block;
+}
+
+.item_descr > h2, .item_descr > h3 {
+    float:left;
+    width:100%;
+}
+.item_descr > h3 > a {
+    margin:0;
+    color:#505050;
+    text-decoration:none;
+    font-size:0.9em;
+}
+
+
+
+/* detalhe do produto */
+
+
+
+/* genéricas */
 .bolinha {
     width:15px;
     height:15px;
-    display:block;
+    display:inline-block;
     background:green;
     border:1px solid transparent;
     border-radius:20px;
+    vertical-align:baseline;
+}
+
+.hide, body .hide {
+    display:none;
 }
