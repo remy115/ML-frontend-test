@@ -6,6 +6,10 @@ const concat_stream=require('concat-stream')
 
 const app=express();
 
+const port=parseInt(process.argv[2]) || 3004;
+
+
+// mini "template engine"
 function render1(params) {
     if(!params) params={};
     const titleBase='Mercado Livre - ';
@@ -19,12 +23,15 @@ function render1(params) {
     const jsVars = params.jsVars;
 
     var lista=[],
-        buscado='';
+        buscado='',
+        error='';
     if(jsVars) {
         if(jsVars.lista)
             lista=jsVars.lista;
         if(jsVars.buscado)
             buscado=jsVars.buscado;
+        if(jsVars.error)
+            error=jsVars.error;
     }
     lista=JSON.stringify(lista);
 
@@ -39,7 +46,8 @@ function render1(params) {
             <script>
                 var ML={
                     listaProds:${lista},
-                    buscado:'${buscado}'
+                    buscado:'${buscado}',
+                    error:'${error}'
                 }
             </script>
         </head>
@@ -214,7 +222,7 @@ app.get(['/items','/api/items','/items/:id','/api/items/:id'],function(req,res,n
     return next();
 
 
-},makeConn,getCategories,getCurrencies,function(req,res) {
+},makeConn,getCategories,getCurrencies,function(req,res,next) {
     var html;
     const author={author:'Remy',lastname:'Barros'}
     var id=req.params.id;
@@ -262,6 +270,11 @@ app.get(['/items','/api/items','/items/:id','/api/items/:id'],function(req,res,n
         
     } else {
         var item=req.midObj.items[0];
+        // error
+        if(item.error) {
+            return next(item);
+        }
+
         var curr=arrCurr.find(elem2=>elem2.id===item.currency_id);
         var description=req.midObj.description;
         description=description.replace(/\r\n/g,'<br>');
@@ -302,6 +315,24 @@ app.get(['/items','/api/items','/items/:id','/api/items/:id'],function(req,res,n
 });
 
 
-app.listen(3004,()=>{
-    console.log('listening on port 3004');
+// ERROR HANDLER
+app.use(function(err,req,res,next) {
+
+    var msg=err.error;
+    if(msg === 'not_found') {
+        msg='Página não encontrada!';
+    }
+    html=render1({
+        title:'Página não encontrada',
+        jsVars:{
+            error:msg
+        }
+    });
+
+    return res.status(400).send(html);
+});
+
+
+app.listen(port,()=>{
+    console.log(`listening on port ${port}`);
 });

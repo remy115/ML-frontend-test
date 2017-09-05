@@ -9750,6 +9750,8 @@ var _reactDom = __webpack_require__(98);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _utils = __webpack_require__(184);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -9760,59 +9762,21 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ListaTop = function (_React$Component) {
-    _inherits(ListaTop, _React$Component);
-
-    function ListaTop(props) {
-        _classCallCheck(this, ListaTop);
-
-        return _possibleConstructorReturn(this, (ListaTop.__proto__ || Object.getPrototypeOf(ListaTop)).call(this, props));
-    }
-
-    _createClass(ListaTop, [{
-        key: 'render',
-        value: function render() {
-            var extraClasses = this.props.extraClasses || '';
-            if (extraClasses) extraClasses = ' ' + extraClasses.join(' ');
-
-            var cats = this.props.cats.map(function (elem, index) {
-                return _react2.default.createElement(
-                    'span',
-                    { key: index },
-                    elem
-                );
-            });
-            return _react2.default.createElement(
-                'div',
-                { className: "lista-top" + extraClasses },
-                _react2.default.createElement(
-                    'p',
-                    null,
-                    this.props.buscado,
-                    cats
-                )
-            );
-        }
-    }]);
-
-    return ListaTop;
-}(_react2.default.Component); // ListaTop
-
-var Busca = function (_React$Component2) {
-    _inherits(Busca, _React$Component2);
+var Busca = function (_React$Component) {
+    _inherits(Busca, _React$Component);
 
     function Busca(props) {
         _classCallCheck(this, Busca);
 
-        var _this2 = _possibleConstructorReturn(this, (Busca.__proto__ || Object.getPrototypeOf(Busca)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Busca.__proto__ || Object.getPrototypeOf(Busca)).call(this, props));
 
-        _this2.state = {
-            search: _this2.props.buscado || ''
+        _this.state = {
+            search: _this.props.buscado || ''
         };
 
-        _this2.change = _this2.change.bind(_this2);
-        _this2.submit = _this2.submit.bind(_this2);
-        return _this2;
+        _this.change = _this.change.bind(_this);
+        _this.submit = _this.submit.bind(_this);
+        return _this;
     }
 
     _createClass(Busca, [{
@@ -9864,20 +9828,20 @@ var Busca = function (_React$Component2) {
     return Busca;
 }(_react2.default.Component);
 
-var Lista = function (_React$Component3) {
-    _inherits(Lista, _React$Component3);
+var Lista = function (_React$Component2) {
+    _inherits(Lista, _React$Component2);
 
     function Lista(props) {
         _classCallCheck(this, Lista);
 
-        var _this3 = _possibleConstructorReturn(this, (Lista.__proto__ || Object.getPrototypeOf(Lista)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (Lista.__proto__ || Object.getPrototypeOf(Lista)).call(this, props));
 
-        _this3.lista = props.lista.items;
-        _this3.cats = props.lista.categories;
-        if (!_this3.cats.length) {
-            _this3.cats = ['Nada encontrado!'];
+        _this2.lista = props.lista.items;
+        _this2.cats = props.lista.categories;
+        if (!_this2.cats.length) {
+            _this2.cats = ['Nada encontrado!'];
         }
-        return _this3;
+        return _this2;
     }
 
     _createClass(Lista, [{
@@ -9951,8 +9915,8 @@ var Lista = function (_React$Component3) {
             });
             if (!list.length) {
                 list = _react2.default.createElement(
-                    'div',
-                    { className: 'nao-encontrado' },
+                    _utils.Error,
+                    null,
                     _react2.default.createElement(
                         'h3',
                         null,
@@ -9982,7 +9946,7 @@ var Lista = function (_React$Component3) {
             return _react2.default.createElement(
                 'div',
                 { className: 'center-content' },
-                _react2.default.createElement(ListaTop, { cats: this.cats }),
+                _react2.default.createElement(_utils.ListaTop, { cats: this.cats }),
                 _react2.default.createElement(
                     'div',
                     { id: 'lista-prods' },
@@ -9995,24 +9959,24 @@ var Lista = function (_React$Component3) {
     return Lista;
 }(_react2.default.Component);
 
-var Detalhe = function (_React$Component4) {
-    _inherits(Detalhe, _React$Component4);
+var Detalhe = function (_React$Component3) {
+    _inherits(Detalhe, _React$Component3);
 
     function Detalhe(props) {
         _classCallCheck(this, Detalhe);
 
         // props.item;
-        var _this4 = _possibleConstructorReturn(this, (Detalhe.__proto__ || Object.getPrototypeOf(Detalhe)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (Detalhe.__proto__ || Object.getPrototypeOf(Detalhe)).call(this, props));
 
-        _this4.buscado = null;
-        if (_this4.props.buscado) {
-            _this4.buscado = _react2.default.createElement(
+        _this3.buscado = null;
+        if (_this3.props.buscado) {
+            _this3.buscado = _react2.default.createElement(
                 'a',
-                { href: '/items?search=' + _this4.props.buscado },
+                { href: '/items?search=' + _this3.props.buscado },
                 'Voltar \xE0 busca'
             );
         }
-        return _this4;
+        return _this3;
     }
 
     _createClass(Detalhe, [{
@@ -10027,7 +9991,7 @@ var Detalhe = function (_React$Component4) {
             return _react2.default.createElement(
                 'div',
                 { className: 'center-content' },
-                _react2.default.createElement(ListaTop, { cats: cats, buscado: this.buscado, extraClasses: ['lista-top-detalhe'] }),
+                _react2.default.createElement(_utils.ListaTop, { cats: cats, buscado: this.buscado, extraClasses: ['lista-top-detalhe'] }),
                 _react2.default.createElement(
                     'div',
                     { id: 'produto-detalhe' },
@@ -10077,8 +10041,8 @@ var Detalhe = function (_React$Component4) {
     return Detalhe;
 }(_react2.default.Component); // Detalhe
 
-var App = function (_React$Component5) {
-    _inherits(App, _React$Component5);
+var App = function (_React$Component4) {
+    _inherits(App, _React$Component4);
 
     function App(props) {
         _classCallCheck(this, App);
@@ -10087,11 +10051,12 @@ var App = function (_React$Component5) {
         "items":[{"id":"MLA650695729","title":"Soldadora Inverter Dogo Star-175 Uso Profesional + Bolso !","price":{"currency":"Peso argentino","amount":6499,"decimals":2},"picture":"http://mla-s1-p.mlstatic.com/251815-MLA25304824003_012017-I.jpg","condition":"new","free_shipping":true},{"id":"MLA652241526","title":"Grupo Electrógeno Generador Eléctrico Dogo 3500 2.7 Kva","price":{"currency":"Peso argentino","amount":7800,"decimals":2},"picture":"http://mla-s2-p.mlstatic.com/444025-MLA25346058248_022017-I.jpg","condition":"new","free_shipping":true},{"id":"MLA602944057","title":"Generador Electrico Grupo Electrógeno Nafta Dogo 2500 2.3kv","price":{"currency":"Peso argentino","amount":5999,"decimals":2},"picture":"http://mla-s1-p.mlstatic.com/698924-MLA25920440368_082017-I.jpg","condition":"new","free_shipping":false},{"id":"MLA618793078","title":"Soldadora Inverter Dogo Star 255 Bolso + Máscara + Escuadra","price":{"currency":"Peso argentino","amount":12672,"decimals":2},"picture":"http://mla-s2-p.mlstatic.com/945919-MLA25806095388_072017-I.jpg","condition":"new","free_shipping":true}]
         */
 
-        var _this5 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this5.lista = ML.listaProds;
-        _this5.buscado = ML.buscado;
-        return _this5;
+        _this4.lista = ML.listaProds;
+        _this4.buscado = ML.buscado;
+        _this4.error = ML.error;
+        return _this4;
     }
 
     _createClass(App, [{
@@ -10113,6 +10078,34 @@ var App = function (_React$Component5) {
                     null,
                     _react2.default.createElement(Busca, null),
                     _react2.default.createElement(Detalhe, { item: this.lista.item, buscado: buscado })
+                );
+            } else if (this.error) {
+                ret = _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(Busca, null),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'center-content' },
+                        _react2.default.createElement(
+                            _utils.Error,
+                            null,
+                            _react2.default.createElement(
+                                'h2',
+                                null,
+                                this.error
+                            ),
+                            _react2.default.createElement(
+                                'p',
+                                { className: 'ret-inicial' },
+                                _react2.default.createElement(
+                                    'a',
+                                    { href: '/' },
+                                    'Retornar \xE0 p\xE1gina inicial'
+                                )
+                            )
+                        )
+                    )
                 );
             } else {
                 window.sessionStorage.setItem('ML_last_search', '');
@@ -22767,6 +22760,90 @@ var ReactDOMInvalidARIAHook = {
 
 module.exports = ReactDOMInvalidARIAHook;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 184 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(82);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Error = function (_React$Component) {
+    _inherits(Error, _React$Component);
+
+    function Error(props) {
+        _classCallCheck(this, Error);
+
+        return _possibleConstructorReturn(this, (Error.__proto__ || Object.getPrototypeOf(Error)).call(this, props));
+    }
+
+    _createClass(Error, [{
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                { className: "nao-encontrado", id: "error" },
+                this.props.children
+            );
+        }
+    }]);
+
+    return Error;
+}(_react2.default.Component);
+
+var ListaTop = function (_React$Component2) {
+    _inherits(ListaTop, _React$Component2);
+
+    function ListaTop(props) {
+        _classCallCheck(this, ListaTop);
+
+        return _possibleConstructorReturn(this, (ListaTop.__proto__ || Object.getPrototypeOf(ListaTop)).call(this, props));
+    }
+
+    _createClass(ListaTop, [{
+        key: "render",
+        value: function render() {
+            var extraClasses = this.props.extraClasses || '';
+            if (extraClasses) extraClasses = ' ' + extraClasses.join(' ');
+
+            var cats = this.props.cats.map(function (elem, index) {
+                return _react2.default.createElement(
+                    "span",
+                    { key: index },
+                    elem
+                );
+            });
+            return _react2.default.createElement(
+                "div",
+                { className: "lista-top" + extraClasses },
+                _react2.default.createElement(
+                    "p",
+                    null,
+                    this.props.buscado,
+                    cats
+                )
+            );
+        }
+    }]);
+
+    return ListaTop;
+}(_react2.default.Component); // ListaTop
+
+module.exports = { Error: Error, ListaTop: ListaTop };
 
 /***/ })
 /******/ ]);

@@ -1,24 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Error,ListaTop} from './utils/utils';
 
-class ListaTop extends React.Component {
-    constructor(props) {
-        super(props)
-    }
 
-    render() {
-        var extraClasses=this.props.extraClasses || '';
-        if(extraClasses)
-            extraClasses=' '+extraClasses.join(' ');
-
-        var cats=this.props.cats.map((elem,index)=>{
-            return <span key={index}>{elem}</span>
-        });
-        return (
-            <div className={"lista-top"+extraClasses}><p>{this.props.buscado}{cats}</p></div>
-        )
-    }
-} // ListaTop
 
 class Busca extends React.Component {
     constructor(props) {
@@ -116,14 +100,14 @@ class Lista extends React.Component {
         });
         if( ! list.length) {
             list=(
-                <div className="nao-encontrado">
+                <Error>
                     <h3>Não foram encontrados produtos segundo sua busca!</h3>
                     <ul>
                         <li>Revise sua ortografia.</li>
                         <li>Navegue pela categoria de produtos.</li>
                         <li>Utilize termos mais genéricos ou menos termos.</li>
                     </ul>
-                </div>
+                </Error>
             )
         }
         return (
@@ -185,6 +169,7 @@ class App extends React.Component {
 
         this.lista=ML.listaProds;
         this.buscado=ML.buscado;
+        this.error=ML.error;
     }
 
     render() {
@@ -201,6 +186,18 @@ class App extends React.Component {
                     <Busca />
                     <Detalhe item={this.lista.item} buscado={buscado} />
             </div>);
+        } else if(this.error) {
+            ret=(
+                <div>
+                    <Busca />
+                    <div className="center-content">
+                        <Error>
+                            <h2>{this.error}</h2>
+                            <p className="ret-inicial"><a href="/">Retornar à página inicial</a></p>
+                        </Error>
+                    </div>
+                </div>
+            )
         } else {
             window.sessionStorage.setItem('ML_last_search','');
             ret=(<div>

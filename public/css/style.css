@@ -16,7 +16,7 @@ body {
     width:100%;
 }
 
-#lista-prods, #produto-detalhe {
+#lista-prods, #produto-detalhe, #error {
     background:#fff;
     display:inherit;
     width:100%;
@@ -253,6 +253,14 @@ header {
 .nao-encontrado > h3 , .nao-encontrado > div{
     float:left;
     width:100%;
+}
+
+.nao-encontrado .ret-inicial {
+    margin:55px 0;
+}
+.nao-encontrado .ret-inicial > a {
+    color:#909090;
+    text-decoration:none;
 }
 
 /* genéricas */
