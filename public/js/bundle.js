@@ -9772,6 +9772,9 @@ var ListaTop = function (_React$Component) {
     _createClass(ListaTop, [{
         key: 'render',
         value: function render() {
+            var extraClasses = this.props.extraClasses || '';
+            if (extraClasses) extraClasses = ' ' + extraClasses.join(' ');
+
             var cats = this.props.cats.map(function (elem, index) {
                 return _react2.default.createElement(
                     'span',
@@ -9781,10 +9784,11 @@ var ListaTop = function (_React$Component) {
             });
             return _react2.default.createElement(
                 'div',
-                { className: 'lista-top' },
+                { className: "lista-top" + extraClasses },
                 _react2.default.createElement(
                     'p',
                     null,
+                    this.props.buscado,
                     cats
                 )
             );
@@ -9803,9 +9807,11 @@ var Busca = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (Busca.__proto__ || Object.getPrototypeOf(Busca)).call(this, props));
 
         _this2.state = {
-            busca: ''
+            search: _this2.props.buscado || ''
         };
+
         _this2.change = _this2.change.bind(_this2);
+        _this2.submit = _this2.submit.bind(_this2);
         return _this2;
     }
 
@@ -9817,6 +9823,16 @@ var Busca = function (_React$Component2) {
             this.setState(_defineProperty({}, name, value));
         }
     }, {
+        key: 'submit',
+        value: function submit(evt) {
+            var busca = this.state.search;
+            if (!busca) {
+                evt.preventDefault();
+                return false;
+            }
+            return true;
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -9825,11 +9841,15 @@ var Busca = function (_React$Component2) {
                 _react2.default.createElement(
                     'div',
                     { className: 'barra-busca' },
-                    _react2.default.createElement('img', { src: '/imgs/mercado-livre.png', alt: 'Todos os produtos em um s\xF3 lugar!' }),
+                    _react2.default.createElement(
+                        'a',
+                        { href: '/' },
+                        _react2.default.createElement('img', { src: '/imgs/mercado-livre.png', alt: 'Todos os produtos em um s\xF3 lugar!' })
+                    ),
                     _react2.default.createElement(
                         'form',
-                        null,
-                        _react2.default.createElement('input', { type: 'text', name: 'busca', placeholder: 'Nunca deixe de buscar', value: this.state.busca, onChange: this.change }),
+                        { method: 'GET', action: '/items', onSubmit: this.submit },
+                        _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Nunca deixe de buscar', value: this.state.search, onChange: this.change }),
                         _react2.default.createElement(
                             'button',
                             { className: 'btn-busca' },
@@ -9854,13 +9874,15 @@ var Lista = function (_React$Component3) {
 
         _this3.lista = props.lista.items;
         _this3.cats = props.lista.categories;
+        if (!_this3.cats.length) {
+            _this3.cats = ['Nada encontrado!'];
+        }
         return _this3;
     }
 
     _createClass(Lista, [{
         key: 'render',
         value: function render() {
-
             var list = this.lista.map(function (elem) {
                 var id = elem.id;
                 var image = elem.picture;
@@ -9927,6 +9949,36 @@ var Lista = function (_React$Component3) {
                     )
                 );
             });
+            if (!list.length) {
+                list = _react2.default.createElement(
+                    'div',
+                    { className: 'nao-encontrado' },
+                    _react2.default.createElement(
+                        'h3',
+                        null,
+                        'N\xE3o foram encontrados produtos segundo sua busca!'
+                    ),
+                    _react2.default.createElement(
+                        'ul',
+                        null,
+                        _react2.default.createElement(
+                            'li',
+                            null,
+                            'Revise sua ortografia.'
+                        ),
+                        _react2.default.createElement(
+                            'li',
+                            null,
+                            'Navegue pela categoria de produtos.'
+                        ),
+                        _react2.default.createElement(
+                            'li',
+                            null,
+                            'Utilize termos mais gen\xE9ricos ou menos termos.'
+                        )
+                    )
+                );
+            }
             return _react2.default.createElement(
                 'div',
                 { className: 'center-content' },
@@ -9949,27 +10001,81 @@ var Detalhe = function (_React$Component4) {
     function Detalhe(props) {
         _classCallCheck(this, Detalhe);
 
-        return _possibleConstructorReturn(this, (Detalhe.__proto__ || Object.getPrototypeOf(Detalhe)).call(this, props));
+        // props.item;
+        var _this4 = _possibleConstructorReturn(this, (Detalhe.__proto__ || Object.getPrototypeOf(Detalhe)).call(this, props));
+
+        _this4.buscado = null;
+        if (_this4.props.buscado) {
+            _this4.buscado = _react2.default.createElement(
+                'a',
+                { href: '/items?search=' + _this4.props.buscado },
+                'Voltar \xE0 busca'
+            );
+        }
+        return _this4;
     }
 
     _createClass(Detalhe, [{
         key: 'render',
         value: function render() {
+            var item = this.props.item;
+            var price = item.price;
+            var cats = item.categories;
+            cats = cats.map(function (elem) {
+                return elem.name;
+            });
             return _react2.default.createElement(
                 'div',
                 { className: 'center-content' },
-                _react2.default.createElement(ListaTop, { cats: this.cats }),
+                _react2.default.createElement(ListaTop, { cats: cats, buscado: this.buscado, extraClasses: ['lista-top-detalhe'] }),
                 _react2.default.createElement(
                     'div',
                     { id: 'produto-detalhe' },
-                    list
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'left' },
+                        _react2.default.createElement('img', { src: item.picture, alt: item.title }),
+                        _react2.default.createElement(
+                            'h2',
+                            null,
+                            'Descri\xE7\xE3o do Produto'
+                        ),
+                        _react2.default.createElement('p', { dangerouslySetInnerHTML: { __html: item.description } })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'right' },
+                        _react2.default.createElement(
+                            'p',
+                            { className: 'right-top' },
+                            'Unidades vendidas: ',
+                            item.sold_quantity
+                        ),
+                        _react2.default.createElement(
+                            'h3',
+                            null,
+                            item.title
+                        ),
+                        _react2.default.createElement(
+                            'h2',
+                            null,
+                            price.symbol,
+                            ' ',
+                            price.amount
+                        ),
+                        _react2.default.createElement(
+                            'button',
+                            { className: 'comprar' },
+                            'Comprar'
+                        )
+                    )
                 )
             );
         }
     }]);
 
     return Detalhe;
-}(_react2.default.Component);
+}(_react2.default.Component); // Detalhe
 
 var App = function (_React$Component5) {
     _inherits(App, _React$Component5);
@@ -9984,6 +10090,7 @@ var App = function (_React$Component5) {
         var _this5 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
         _this5.lista = ML.listaProds;
+        _this5.buscado = ML.buscado;
         return _this5;
     }
 
@@ -9992,13 +10099,23 @@ var App = function (_React$Component5) {
         value: function render() {
             var ret = null;
             if (this.lista && this.lista.items) {
+                window.sessionStorage.setItem('ML_last_search', this.buscado);
+                ret = _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(Busca, { buscado: this.buscado }),
+                    _react2.default.createElement(Lista, { lista: this.lista })
+                );
+            } else if (this.lista && this.lista.item) {
+                var buscado = window.sessionStorage.getItem('ML_last_search');
                 ret = _react2.default.createElement(
                     'div',
                     null,
                     _react2.default.createElement(Busca, null),
-                    _react2.default.createElement(Lista, { lista: this.lista })
+                    _react2.default.createElement(Detalhe, { item: this.lista.item, buscado: buscado })
                 );
             } else {
+                window.sessionStorage.setItem('ML_last_search', '');
                 ret = _react2.default.createElement(
                     'div',
                     null,

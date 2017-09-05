@@ -18,10 +18,13 @@ function render1(params) {
     const js = params.js;
     const jsVars = params.jsVars;
 
-    var lista=[];
+    var lista=[],
+        buscado='';
     if(jsVars) {
         if(jsVars.lista)
             lista=jsVars.lista;
+        if(jsVars.buscado)
+            buscado=jsVars.buscado;
     }
     lista=JSON.stringify(lista);
 
@@ -35,7 +38,8 @@ function render1(params) {
             <title>${title}</title>
             <script>
                 var ML={
-                    listaProds:${lista}
+                    listaProds:${lista},
+                    buscado:'${buscado}'
                 }
             </script>
         </head>
@@ -93,6 +97,28 @@ function getCurrencies(req,res,next) {
 
 } // getCurrencies
 
+function getCategories(req,res,next) {
+    var cat_id=req.midObj ? req.midObj.category_id : null;
+    if(!cat_id) {
+        return next();
+    }
+
+    cat_id=querystring.escape(cat_id);
+    var path=`/categories/${cat_id}`;
+    const req2=https.request({
+        host:'api.mercadolibre.com',
+        path:path
+    });
+    req2.on('response',function(response) {
+        return response.pipe(concat_stream((buffered)=>{
+            buffered=buffered.toString();
+            buffered=JSON.parse(buffered);
+            req.midObj.categories=buffered.path_from_root;
+            return next();
+        }));
+    });
+    req2.end();
+} // getCategories
 
 function makeConn(req,res,next) {
     // console.log(req.midObj);
@@ -139,14 +165,21 @@ app.get('/',function(req,res) {
 
 
 // busca de produtos
-app.get(['/items','/items/:id'],function(req,res,next) {
+app.get(['/items','/api/items','/items/:id','/api/items/:id'],function(req,res,next) {
     // https://api.mercadolibre.com/sites/MLA/search?q=:query
     const host='api.mercadolibre.com';
     const proto='https:';
+    var originalUrl=req.originalUrl;
+    if(originalUrl.indexOf('/api/') > -1) {
+        originalUrl=true;
+    } else {
+        originalUrl=null;
+    }
+    req.isApi=originalUrl;
     var id=req.params.id;
     if(!id) {
         var path='/sites/MLA/search?q=';
-        var query=req.query.search;
+        var query = originalUrl === true ? req.query.q : req.query.search;
         path+=querystring.escape(query);
         req.midObj=[{
             objConn:{host,path},
@@ -173,6 +206,7 @@ app.get(['/items','/items/:id'],function(req,res,next) {
                 cb:function(midObj,result) {
                     result=JSON.parse(result);
                     midObj.items=[result];
+                    midObj.category_id=result.category_id;
                 }
             }
         ]
@@ -180,7 +214,7 @@ app.get(['/items','/items/:id'],function(req,res,next) {
     return next();
 
 
-},makeConn,getCurrencies,function(req,res) {
+},makeConn,getCategories,getCurrencies,function(req,res) {
     var html;
     const author={author:'Remy',lastname:'Barros'}
     var id=req.params.id;
@@ -221,16 +255,20 @@ app.get(['/items','/items/:id'],function(req,res,next) {
         html=render1({
             title:query,
             jsVars:{
-                lista:retObj
+                lista:retObj,
+                buscado:query
             }
         });
         
     } else {
         var item=req.midObj.items[0];
         var curr=arrCurr.find(elem2=>elem2.id===item.currency_id);
+        var description=req.midObj.description;
+        description=description.replace(/\r\n/g,'<br>');
 
         item={
             id:item.id,
+            categories:req.midObj.categories,
             title:item.title,
             price:{
                 currency:curr.currency,
@@ -242,20 +280,24 @@ app.get(['/items','/items/:id'],function(req,res,next) {
             condition:item.condition,
             free_shipping:item.shipping.free_shipping,
             sold_quantity:item.sold_quantity,
-            description:req.midObj.description
+            description:description
         };
        var retObj=Object.assign({},author,{item});
 
-        return res.set('Content-Type','text/json').send(retObj);
+        // return res.set('Content-Type','text/json').send(retObj);
         html=render1({
-            title:query,
+            title:item.title,
             jsVars:{
-                lista:retObj
+                lista:retObj,
             }
         });
 
     }
-    return res.send(html);
+    if(req.isApi === true) {
+        return res.set('Content-Type','text/json').send(retObj);
+    } else {
+        return res.send(html);
+    }
 
 });
 

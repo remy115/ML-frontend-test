@@ -19,6 +19,7 @@ body {
 #lista-prods, #produto-detalhe {
     background:#fff;
     display:inherit;
+    width:100%;
 }
 .lista-top {
     position:relative;
@@ -28,10 +29,32 @@ body {
     font-style:italic;
 }
 .lista-top span:before {
-    content:' | '
+    content:' | ';
 }
-.lista-top span:first-child:before {
-    content:''
+.lista-top.lista-top-detalhe span {
+    color:#3483fa;
+    cursor:pointer;
+}
+.lista-top.lista-top-detalhe span:last-child {
+    color:#1259c3;
+}
+.lista-top.lista-top-detalhe span:before {
+    content:' > ';
+    color:#909090;
+    padding:0 7px;
+}
+.lista-top span:first-of-type:before {
+    content:'';
+    padding:0;
+}
+.lista-top > p > a {
+    color:#333;
+    text-decoration:none;
+}
+.lista-top > p > a:after {
+    content:' | ';
+    padding:0 7px;
+    color:#909090;
 }
 
 header {
@@ -67,7 +90,7 @@ header {
     max-width:1000px;
 }
 
-.barra-busca > img {
+.barra-busca > a > img {
     width:50px;
     height:50px;
     position:absolute;
@@ -185,8 +208,52 @@ header {
 
 
 /* detalhe do produto */
+#produto-detalhe {
+    padding:30px;
+}
+#produto-detalhe, #produto-detalhe .left, #produto-detalhe .right {
+    min-height:650px;
+    box-sizing:border-box;
+}
+#produto-detalhe .left {
+    width:74.5%;
+    float:left;
+}
+#produto-detalhe .left img {
+    display:block;
+    width:400px;
+    height:400px;
+}
+#produto-detalhe .left > h2 {
+    margin-top:100px;
+}
+#produto-detalhe .left p {
+    color:#909090;
+}
+#produto-detalhe .right {
+    width:24.5%;
+    float:right;
+}
+#produto-detalhe .right p.right-top {
+    font-size:0.8em;
+    color:#707070;
+    font-weight:bold;
+}
+#produto-detalhe .right h2, #produto-detalhe .right h3 {
+    margin:10px 0;
+}
 
 
+/* não encontrado */
+.nao-encontrado {
+    width:100%;
+    padding-left:100px;
+    box-sizing: border-box;
+}
+.nao-encontrado > h3 , .nao-encontrado > div{
+    float:left;
+    width:100%;
+}
 
 /* genéricas */
 .bolinha {
@@ -201,4 +268,15 @@ header {
 
 .hide, body .hide {
     display:none;
+}
+
+button.comprar {
+    background:blue;
+    color:#fff;
+    font-weight:bold;
+    font-size:1.1em;
+    width:90%;
+    padding:10px 0;
+    border:1px solid transparent;
+    border-radius:5px;
 }

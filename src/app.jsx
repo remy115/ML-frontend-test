@@ -7,11 +7,15 @@ class ListaTop extends React.Component {
     }
 
     render() {
+        var extraClasses=this.props.extraClasses || '';
+        if(extraClasses)
+            extraClasses=' '+extraClasses.join(' ');
+
         var cats=this.props.cats.map((elem,index)=>{
             return <span key={index}>{elem}</span>
         });
         return (
-            <div className="lista-top"><p>{cats}</p></div>
+            <div className={"lista-top"+extraClasses}><p>{this.props.buscado}{cats}</p></div>
         )
     }
 } // ListaTop
@@ -20,9 +24,11 @@ class Busca extends React.Component {
     constructor(props) {
         super(props)
         this.state={
-            busca:''
+            search:this.props.buscado || ''
         }
+
         this.change=this.change.bind(this);
+        this.submit=this.submit.bind(this);
     }
 
     change(evt) {
@@ -33,13 +39,22 @@ class Busca extends React.Component {
         });
     }
 
+    submit(evt) {
+        var busca=this.state.search;
+        if(!busca) {
+            evt.preventDefault();
+            return false;
+        }
+        return true;
+    }
+
     render() {
         return (
             <header>
                 <div className="barra-busca">
-                    <img src="/imgs/mercado-livre.png" alt="Todos os produtos em um só lugar!" />
-                    <form>
-                        <input type="text" name="busca" placeholder="Nunca deixe de buscar" value={this.state.busca} onChange={this.change} />
+                    <a href="/"><img src="/imgs/mercado-livre.png" alt="Todos os produtos em um só lugar!" /></a>
+                    <form method="GET" action="/items" onSubmit={this.submit}>
+                        <input type="text" name="search" placeholder="Nunca deixe de buscar" value={this.state.search} onChange={this.change} />
                         <button className="btn-busca"><i className="icon-glyph"></i></button>
                     </form>
                 </div>
@@ -54,10 +69,12 @@ class Lista extends React.Component {
         super(props)
         this.lista=props.lista.items;
         this.cats=props.lista.categories;
+        if(!this.cats.length) {
+            this.cats=['Nada encontrado!']
+        }
     }
 
     render() {
-
         var list=this.lista.map((elem)=>{
             var id=elem.id;
             var image=elem.picture;
@@ -97,6 +114,18 @@ class Lista extends React.Component {
                 </div>
             );
         });
+        if( ! list.length) {
+            list=(
+                <div className="nao-encontrado">
+                    <h3>Não foram encontrados produtos segundo sua busca!</h3>
+                    <ul>
+                        <li>Revise sua ortografia.</li>
+                        <li>Navegue pela categoria de produtos.</li>
+                        <li>Utilize termos mais genéricos ou menos termos.</li>
+                    </ul>
+                </div>
+            )
+        }
         return (
             <div className="center-content">
                 <ListaTop cats={this.cats} />
@@ -111,20 +140,41 @@ class Lista extends React.Component {
 class Detalhe extends React.Component {
     constructor(props) {
         super(props)
+        // props.item;
+        this.buscado=null;
+        if(this.props.buscado) {
+            this.buscado=<a href={'/items?search='+this.props.buscado}>Voltar à busca</a>
+        }
     }
 
     render() {
+        const item=this.props.item;
+        const price=item.price;
+        var cats=item.categories;
+        cats=cats.map((elem)=>{
+            return elem.name;
+        });
         return (
             <div className="center-content">
-                <ListaTop cats={this.cats} />
+                <ListaTop cats={cats} buscado={this.buscado} extraClasses={['lista-top-detalhe']} />
                 <div id="produto-detalhe">
-                    {list}
+                    <div className="left">
+                        <img src={item.picture} alt={item.title} />
+                        <h2>Descrição do Produto</h2>
+                        <p dangerouslySetInnerHTML={{__html:item.description}}></p>
+                    </div>
+                    <div className="right">
+                        <p className="right-top">Unidades vendidas: {item.sold_quantity}</p>
+                        <h3>{item.title}</h3>
+                        <h2>{price.symbol} {price.amount}</h2>
+                        <button className="comprar">Comprar</button>
+                    </div>
                 </div>
             </div>
         )
 
     }
-}
+} // Detalhe
 
 class App extends React.Component {
     constructor(props) {
@@ -134,16 +184,25 @@ class App extends React.Component {
 */
 
         this.lista=ML.listaProds;
+        this.buscado=ML.buscado;
     }
 
     render() {
         var ret=null;
         if(this.lista && this.lista.items) {
+            window.sessionStorage.setItem('ML_last_search',this.buscado);
             ret=(<div>
-                    <Busca />
+                    <Busca buscado={this.buscado} />
                     <Lista lista={this.lista} />
                 </div>);
+        } else if(this.lista && this.lista.item) {
+            var buscado=window.sessionStorage.getItem('ML_last_search');
+            ret=(<div>
+                    <Busca />
+                    <Detalhe item={this.lista.item} buscado={buscado} />
+            </div>);
         } else {
+            window.sessionStorage.setItem('ML_last_search','');
             ret=(<div>
                     <Busca />
                 </div>)
